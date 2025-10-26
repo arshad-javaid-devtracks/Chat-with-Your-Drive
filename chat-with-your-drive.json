@@ -1,0 +1,1484 @@
+{
+  "name": "Webhook respond-and-respond-back",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## Ingestion lane — watch → extract → chunk → embed → upsert",
+        "height": 736,
+        "width": 2656,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        0,
+        0
+      ],
+      "typeVersion": 1,
+      "id": "6b57e512-e8b1-4efb-85aa-4002a24ad261",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "## Chat lane — “question → embed → search → (rerank) → answer",
+        "height": 672,
+        "width": 1488,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        0,
+        736
+      ],
+      "typeVersion": 1,
+      "id": "590f142d-d077-4a97-9638-843a3eec9762",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "## Cleanup lane — detect trash → delete vectors by file_id",
+        "height": 400,
+        "width": 2048,
+        "color": 7
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1504,
+        1008
+      ],
+      "typeVersion": 1,
+      "id": "ceaac8d9-63f6-4c96-90eb-54bd66edb968",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "content": "## 🚀 Ultimate n8n Agentic RAG Template\n\n## What makes this template powerful:\n- **Intelligent tool selection**: Switches between RAG lookups, SQL queries, or full document retrieval based on the question\n- **Complete document context**: Accesses entire documents when needed instead of just chunks\n- **Accurate numerical analysis**: Uses SQL for precise calculations on spreadsheet/tabular data\n- **Cross-document insights**: Connects information across your entire knowledge base\n- **Multi-file processing**: Handles multiple documents in a single workflow loop\n- **Efficient storage**: Uses JSONB in Supabase to store tabular data without creating new tables for each CSV\n\n## Getting Started\n1. Run the table creation nodes first to set up your database tables in Supabase\n2. Upload your documents through Google Drive (or swap out for a different file storage solution)\n3. The agent will process them automatically (chunking text, storing tabular data in Supabase)\n4. Start asking questions that leverage the agent's multiple reasoning approaches\n\n## Customization\nThis template provides a solid foundation that you can extend by:\n- Tuning the system prompt for your specific use case\n- Adding document metadata like summaries\n- Implementing more advanced RAG techniques\n- Optimizing for larger knowledge bases\n\n",
+        "height": 1144,
+        "width": 540,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -560,
+        144
+      ],
+      "typeVersion": 1,
+      "id": "313428d4-6060-475b-84fa-a9814655c32a",
+      "name": "Sticky Note9"
+    },
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "triggerOn": "specificFolder",
+        "folderToWatch": {
+          "__rl": true,
+          "value": "1EY7ZmhK2rob1CIl5BFH0lnpTP3l56HXB",
+          "mode": "list",
+          "cachedResultName": "n8n-ai",
+          "cachedResultUrl": "https://drive.google.com/drive/folders/1EY7ZmhK2rob1CIl5BFH0lnpTP3l56HXB"
+        },
+        "event": "fileCreated",
+        "options": {}
+      },
+      "id": "1d7f4e52-3ecf-487a-90f2-23a8c6bf5850",
+      "name": "File Created",
+      "type": "n8n-nodes-base.googleDriveTrigger",
+      "typeVersion": 1,
+      "position": [
+        48,
+        128
+      ],
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "OCsqJF86Jha4lECX",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "triggerOn": "specificFolder",
+        "folderToWatch": {
+          "__rl": true,
+          "value": "1EY7ZmhK2rob1CIl5BFH0lnpTP3l56HXB",
+          "mode": "list",
+          "cachedResultName": "n8n-ai",
+          "cachedResultUrl": "https://drive.google.com/drive/folders/1EY7ZmhK2rob1CIl5BFH0lnpTP3l56HXB"
+        },
+        "event": "fileUpdated",
+        "options": {}
+      },
+      "id": "db772120-e2b8-4dd0-a30d-6c2559334790",
+      "name": "File Updated",
+      "type": "n8n-nodes-base.googleDriveTrigger",
+      "typeVersion": 1,
+      "position": [
+        48,
+        480
+      ],
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "OCsqJF86Jha4lECX",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": {
+          "__rl": true,
+          "value": "={{$json.id}}",
+          "mode": "id"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        272,
+        304
+      ],
+      "id": "77829a94-1a98-41ec-96b7-f38744cbc768",
+      "name": "Download file",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "OCsqJF86Jha4lECX",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{$json.mimeType}}",
+                    "rightValue": "application/pdf",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "f67dedea-8ed5-4674-af99-beeb5980091d"
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "0aad872c-925e-4b5b-9743-47ce4abd65a6",
+                    "leftValue": "={{$json.mimeType}}",
+                    "rightValue": "application/vnd.google-apps.document",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "485a902f-9e7d-44d8-99ea-2837b47b7baf",
+                    "leftValue": "={{$json.mimeType}}",
+                    "rightValue": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "8438bca8-482a-4058-91a7-d8503ba3a006",
+                    "leftValue": "={{$json.mimeType}}",
+                    "rightValue": "text/csv",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.3,
+      "position": [
+        464,
+        272
+      ],
+      "id": "f88c5180-9205-4dbf-b5dd-c38c0d662b5d",
+      "name": "Switch- By Type"
+    },
+    {
+      "parameters": {
+        "operation": "pdf",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1,
+      "position": [
+        752,
+        32
+      ],
+      "id": "23a9573a-3cfe-4487-8955-3884c5987921",
+      "name": "Extract from File"
+    },
+    {
+      "parameters": {
+        "operation": "xlsx",
+        "options": {}
+      },
+      "id": "39edad9f-619a-455f-a3a3-91aa99e7c679",
+      "name": "Parse Excel File",
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1,
+      "position": [
+        752,
+        384
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": {
+          "__rl": true,
+          "value": "={{$json.id}}",
+          "mode": "id"
+        },
+        "options": {
+          "googleFileConversion": {
+            "conversion": {
+              "docsToFormat": "text/plain",
+              "drawingsToFormat": "application/pdf",
+              "slidesToFormat": "application/pdf"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        752,
+        208
+      ],
+      "id": "1416218e-bb86-4ffa-a1d7-29ab1f6bd349",
+      "name": "Extract Google Doc Text",
+      "alwaysOutputData": false,
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "OCsqJF86Jha4lECX",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1,
+      "position": [
+        752,
+        560
+      ],
+      "id": "79ecf811-6492-4940-bc23-54c0008d317b",
+      "name": "Extract from CSV"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Current extractor output for THIS branch:\nconst inItem = $json;\n\n// Safe helper to read from \"Download file\" (always executed upstream)\nfunction fromDownload(key, fallback = null) {\n  try {\n    const v = $node[\"Download file\"].json?.[key];\n    return v !== undefined ? v : fallback;\n  } catch {\n    return fallback;\n  }\n}\n\nconst base = {\n  file_id:      fromDownload('id', inItem.id || null),\n  file_title:   fromDownload('name', inItem.name || null),\n  mime_type:    fromDownload('mimeType', inItem.mimeType || null),\n  drive_url:    fromDownload('webViewLink', inItem.webViewLink || null),\n  parents:      fromDownload('parents', inItem.parents || null),\n  size:         fromDownload('size', inItem.size || 0),\n  modified_at:  fromDownload('modifiedTime', inItem.modifiedTime || new Date().toISOString()),\n  source: \"google_drive\",\n  lang: null, client: null, year: null,\n};\n\n// 1) PDF / text extractors put text on `json.text`\nif (typeof inItem.text === 'string' && inItem.text.trim()) {\n  return [{ ...base, kind: \"text\", text: inItem.text }];\n}\n\n// 2) Google Doc export (txt) comes as binary on this SAME item\nif (inItem.binary?.data?.data) {\n  const t = Buffer.from(inItem.binary.data.data, 'base64').toString('utf8');\n  return [{ ...base, kind: \"text\", text: t }];\n}\n\n// 3) Rows (CSV/XLSX) — some builds output rows as arrays per item;\n//    If your extractor emits multiple items (one per row), just pass them forward:\nif (Array.isArray(inItem.rows)) {\n  return [{ ...base, kind: \"rows\", rows: inItem.rows }];\n}\n\n// If the extractor emitted a single JSON row, pass the whole object as a single \"row\"\nif (typeof inItem === 'object' && Object.keys(inItem).length && !inItem.text && !inItem.binary) {\n  return [{ ...base, kind: \"rows\", rows: [inItem] }];\n}\n\n// Fallback\nreturn [{ ...base, kind: \"unknown\", text: \"\" }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1072,
+        304
+      ],
+      "id": "c0b752a3-7f6b-4f14-9424-815d15d509fe",
+      "name": "Normalize Content"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{$json.kind}}",
+                    "rightValue": "text",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{$json.kind}}",
+                    "rightValue": "rows",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.3,
+      "position": [
+        1280,
+        304
+      ],
+      "id": "d4157c35-cf76-4f16-8bd8-468c31835263",
+      "name": "Switch - Content Type"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Convert tabular data (CSV/Excel) to searchable text\nconst rows = $json.rows || [];\nif (rows.length === 0) {\n  return [{ ...$json, kind: \"text\", text: \"Empty spreadsheet\" }];\n}\n\nconst headers = Object.keys(rows[0]);\nconst textLines = [];\ntextLines.push(`Spreadsheet: ${$json.file_title || 'Untitled'}`);\ntextLines.push(`Total Rows: ${rows.length}`);\ntextLines.push('');\ntextLines.push('Columns: ' + headers.join(', '));\ntextLines.push('');\n\nconst rowLimit = Math.min(rows.length, 100);\ntextLines.push('Data:');\nfor (let i = 0; i < rowLimit; i++) {\n  const row = rows[i];\n  const rowText = headers.map(h => `${h}: ${row[h] ?? 'N/A'}`).join(', ');\n  textLines.push(`Row ${i+1}: ${rowText}`);\n}\nif (rows.length > rowLimit) {\n  textLines.push(`... and ${rows.length - rowLimit} more rows`);\n}\n\nreturn [{\n  ...$json,\n  kind: \"text\",\n  text: textLines.join('\\n'),\n  original_kind: \"rows\",\n  row_count: rows.length\n}];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1536,
+        448
+      ],
+      "id": "6f9ccc65-13bd-4b54-8753-460020d6fddf",
+      "name": "Convert Tabular to Text"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Smart chunking with sentence boundaries + overlap\nconst text = $json.text || \"\";\nconst MAX = 1000;         // target chunk size\nconst OVERLAP = 150;      // chars of overlap between chunks\n\n// Split by sentences (fallback to whole text)\nconst sentences = text.match(/[^.!?]+[.!?]+/g) || [text];\n\nconst chunks = [];\nlet current = \"\";\n\nfor (const s of sentences) {\n  const next = (current ? current + \" \" : \"\") + s.trim();\n  if (next.length > MAX) {\n    if (current) {\n      chunks.push(current.trim());\n    }\n    current = s.trim();\n  } else {\n    current = next;\n  }\n}\nif (current) chunks.push(current.trim());\n\n// Add overlap and indexes\nconst withOverlap = [];\nfor (let i = 0; i < chunks.length; i++) {\n  const prev = i > 0 ? chunks[i - 1] : \"\";\n  const overlap = prev ? prev.slice(-OVERLAP) + \" \" : \"\";\n  withOverlap.push({\n    ...$json,\n    chunk_text: (overlap + chunks[i]).trim(),\n    chunk_index: i,\n    total_chunks: chunks.length,\n  });\n}\n\nreturn withOverlap;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1536,
+        288
+      ],
+      "id": "b7dcb39f-6522-47c5-ac75-19e042d22fe6",
+      "name": "Chunk Text"
+    },
+    {
+      "parameters": {
+        "mode": "insert",
+        "qdrantCollection": {
+          "__rl": true,
+          "value": "rag_docs",
+          "mode": "list",
+          "cachedResultName": "rag_docs"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreQdrant",
+      "typeVersion": 1.3,
+      "position": [
+        1952,
+        288
+      ],
+      "id": "52a55826-12b2-443e-99da-8a9dad676999",
+      "name": "Qdrant Vector Store",
+      "credentials": {
+        "qdrantApi": {
+          "id": "D2dBuG2OECLMRwep",
+          "name": "QdrantApi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        1904,
+        496
+      ],
+      "id": "1e7f9ce3-680e-438a-a216-7501084d9e02",
+      "name": "Embeddings OpenAI",
+      "credentials": {
+        "openAiApi": {
+          "id": "VfQhdpiUtA1XMQFj",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## Create the collection once with an HTTP Request node",
+        "height": 256,
+        "width": 752,
+        "color": 2
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1504,
+        736
+      ],
+      "typeVersion": 1,
+      "id": "751d6430-f909-4834-b226-9b3ce0651f6a",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "method": "PUT",
+        "url": "https://7eb19fd0-26e0-44af-ae23-295535776fc7.us-west-2-0.aws.cloud.qdrant.io/collections/rag_docs",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "api-key",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3MiOiJtIn0.2i0nVaao2RGOS3Ap2p8MKBSs48imYPwqG6HFlL-ElKc"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n  \"vectors\": { \"size\": 1536, \"distance\": \"Cosine\" },\n  \"on_disk_payload\": true,\n  \"payload_schema\": {\n    \"metadata.file_id\": { \"type\": \"keyword\" },\n    \"metadata.title\":   { \"type\": \"keyword\" },\n    \"metadata.mime\":    { \"type\": \"keyword\" },\n    \"metadata.url\":     { \"type\": \"keyword\" },\n    \"metadata.source\":  { \"type\": \"keyword\" }\n  }\n}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1600,
+        800
+      ],
+      "id": "7a6c8108-bff2-4b28-958d-c24e888d93f9",
+      "name": "Qdrant – Create Collection"
+    },
+    {
+      "parameters": {
+        "jsonMode": "expressionData",
+        "jsonData": "={{ $json.text }}",
+        "options": {
+          "metadata": {
+            "metadataValues": [
+              {
+                "name": "file_id",
+                "value": "={{$json.metadata.file_id}}"
+              },
+              {
+                "name": "title",
+                "value": "={{$json.metadata.title}}"
+              },
+              {
+                "name": "mime",
+                "value": "={{$json.metadata.mime}}"
+              },
+              {
+                "name": "url",
+                "value": "={{$json.metadata.url}}"
+              },
+              {
+                "name": "source",
+                "value": "={{$json.metadata.source}}"
+              }
+            ]
+          }
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.documentDefaultDataLoader",
+      "typeVersion": 1.1,
+      "position": [
+        2304,
+        512
+      ],
+      "id": "a725d438-b533-40f3-a7f6-31c53449dbd9",
+      "name": "Default Data Loader"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "424e7b3a-63f5-4969-804c-ecfe33663170",
+              "name": "text",
+              "value": "={{$json.chunk_text}}",
+              "type": "string"
+            },
+            {
+              "id": "223cb66b-9abb-40f3-9210-3580d48b6ea3",
+              "name": "metadata",
+              "value": "={{({\n  file_id: $json.file_id,\n  title: $json.file_title,\n  mime: $json.mime_type,\n  url: $json.drive_url,\n  source: $json.source,\n  chunk_index: $json.chunk_index || 0,\n  total_chunks: $json.total_chunks || 1,\n  original_kind: $json.original_kind || $json.kind,\n  indexed_at: new Date().toISOString()\n})}}",
+              "type": "object"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1760,
+        288
+      ],
+      "id": "41fb1f0f-5529-46a5-80ae-2f2661729eb3",
+      "name": "Doc Shape"
+    },
+    {
+      "parameters": {
+        "content": "## Testing Node\n",
+        "height": 320,
+        "width": 1168,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        2688,
+        272
+      ],
+      "typeVersion": 1,
+      "id": "7467bb0f-1c86-466c-903e-881ff4e637ad",
+      "name": "Sticky Note4"
+    },
+    {
+      "parameters": {
+        "mode": "load",
+        "qdrantCollection": {
+          "__rl": true,
+          "value": "rag_docs",
+          "mode": "list"
+        },
+        "prompt": "Query: What does it say about filing deadlines and penalties?",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreQdrant",
+      "typeVersion": 1.3,
+      "position": [
+        2832,
+        336
+      ],
+      "id": "037b7182-549e-4af9-bdc9-f52dd1ff0391",
+      "name": "Qdrant – Get Many",
+      "credentials": {
+        "qdrantApi": {
+          "id": "D2dBuG2OECLMRwep",
+          "name": "QdrantApi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "35d6a6b7-af49-4c6c-a96e-0fc4d4bc5f7a",
+              "leftValue": "={{ $json.score }}",
+              "rightValue": 0.3,
+              "operator": {
+                "type": "number",
+                "operation": "gte"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        3216,
+        336
+      ],
+      "id": "0f8dc7bc-3b5f-42b0-b95e-3c12344c0950",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "public": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        192,
+        816
+      ],
+      "id": "c1d33c06-2651-401a-b774-a7e1e3a5f223",
+      "name": "When chat message received",
+      "webhookId": "ccac9cba-2f31-45fc-8374-24eae2539456"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {}
+          ]
+        }
+      },
+      "id": "c3afa2da-fbdf-47a2-b1d3-6b56e0974458",
+      "name": "Check Every Day",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        1584,
+        1232
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://www.googleapis.com/drive/v3/files",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleDriveOAuth2Api",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "q",
+              "value": "'1LyKMELMl3aavbaJF-780z4FmJmFqy72Y' in parents and trashed = true"
+            },
+            {
+              "name": "fields",
+              "value": "files(id,name,mimeType,webViewLink,trashed,trashedTime)"
+            },
+            {
+              "name": "pageSize",
+              "value": "1000"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "bb50064f-a457-4592-b081-e9b1a5fe7f83",
+      "name": "Get Trashed Files via API",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [
+        1952,
+        1072
+      ],
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "OCsqJF86Jha4lECX",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Parse the response from Google Drive API\nconst response = $input.first().json;\nconst trashedFiles = response.files || [];\n\n// If nothing to do, return NO items\nif (trashedFiles.length === 0) {\n  return [];\n}\n\n// One item per file\nreturn trashedFiles.map(file => ({\n  file_id: file.id,\n  file_name: file.name,\n  file_type: file.mimeType,\n  file_url: file.webViewLink,\n  trashed_time: file.trashedTime,\n}));\n"
+      },
+      "id": "edb2b0b7-e8fe-4126-a626-ae1ec75477eb",
+      "name": "Parse Trashed Files",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2224,
+        1248
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 1
+          },
+          "conditions": [
+            {
+              "id": "40e4b0ff-1e6f-4e46-bc87-51d6890dc063",
+              "leftValue": "={{ $json.file_id }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "c0597e82-243c-49dd-af98-823aef51a0f9",
+      "name": "Has Files to Delete?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        2496,
+        1072
+      ]
+    },
+    {
+      "parameters": {
+        "batchSize": 50,
+        "options": {}
+      },
+      "id": "c7fbef53-0e4f-4726-a236-01a23f1265d9",
+      "name": "Split in Batches (50)1",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 2,
+      "position": [
+        2784,
+        1232
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://7eb19fd0-26e0-44af-ae23-295535776fc7.us-west-2-0.aws.cloud.qdrant.io/collections/rag_docs/points/delete",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "api-key",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3MiOiJtIn0.2i0nVaao2RGOS3Ap2p8MKBSs48imYPwqG6HFlL-ElKc"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"filter\": {\n    \"must\": [\n      { \"key\": \"metadata.file_id\", \"match\": { \"value\": \"{{$json.file_id}}\" } }\n    ]\n  }\n}\n",
+        "options": {}
+      },
+      "id": "b388ef57-b425-444a-829b-524dea955375",
+      "name": "Qdrant – Delete by file_id1",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        3040,
+        1072
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "deleteFile",
+        "fileId": {
+          "__rl": true,
+          "value": "={{ $('Split in Batches (50)1').item.json.file_id }}",
+          "mode": "id"
+        },
+        "options": {
+          "deletePermanently": true
+        }
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        3344,
+        1216
+      ],
+      "id": "e0586107-af60-4588-9f14-eaa4c27243d2",
+      "name": "Delete a file",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "OCsqJF86Jha4lECX",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "PUT",
+        "url": "https://7eb19fd0-26e0-44af-ae23-295535776fc7.us-west-2-0.aws.cloud.qdrant.io/collections/rag_docs/index",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "api-key",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2Nlc3MiOiJtIn0.2i0nVaao2RGOS3Ap2p8MKBSs48imYPwqG6HFlL-ElKc"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n  \"field_name\": \"metadata.file_id\",\n  \"field_schema\": \"keyword\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1936,
+        800
+      ],
+      "id": "6ce1a0c4-0478-48e4-b422-058356567822",
+      "name": "Create the - Qdrant Index"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.body.chatInput }}",
+        "options": {
+          "systemMessage": "You are an intelligent RAG assistant with access to a document knowledge base.\n\nWhen answering questions:\n1. Search for relevant information using the provided retrieval tool\n2. Always cite your sources using [filename] notation\n3. If information is incomplete or not found, acknowledge the limitations\n4. Format responses with clear structure using bullet points or numbered lists when appropriate\n5. Distinguish between direct quotes and your interpretations\n6. For tabular data, mention if the source was a spreadsheet or CSV file\n\nBe precise, accurate, and helpful. Provide context when necessary but keep responses concise."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        736,
+        832
+      ],
+      "id": "4fa6ed22-0b8d-47bc-9726-18f6688a6139",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "mode": "retrieve-as-tool",
+        "toolDescription": "={{ $json.chatInput ?? $json.message ?? $json.prompt ?? 'No description provided' }}",
+        "qdrantCollection": {
+          "__rl": true,
+          "value": "rag_docs",
+          "mode": "list",
+          "cachedResultName": "rag_docs"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreQdrant",
+      "typeVersion": 1.3,
+      "position": [
+        1008,
+        1072
+      ],
+      "id": "6e56d55f-c7d0-4a5f-8fd0-1ebf5adfed6c",
+      "name": "Qdrant Vector Store1",
+      "credentials": {
+        "qdrantApi": {
+          "id": "D2dBuG2OECLMRwep",
+          "name": "QdrantApi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        928,
+        1216
+      ],
+      "id": "f066b21f-b59f-4e23-9ee1-26191850ff05",
+      "name": "Embeddings OpenAI2",
+      "credentials": {
+        "openAiApi": {
+          "id": "VfQhdpiUtA1XMQFj",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4o-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        608,
+        1072
+      ],
+      "id": "0f1316c7-5e01-444f-bd8d-ffa5f4ace8ac",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "VfQhdpiUtA1XMQFj",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $json.sessionId || $runIndex }}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        816,
+        1072
+      ],
+      "id": "8bbd38fc-2284-47ec-a8c4-1b965fd2fb30",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        2832,
+        592
+      ],
+      "id": "2eb451fd-ffa6-44d5-aa2f-a22cfab79df1",
+      "name": "Embeddings OpenAI1",
+      "credentials": {
+        "openAiApi": {
+          "id": "VfQhdpiUtA1XMQFj",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        2784,
+        1088
+      ],
+      "id": "9a69631c-23c2-4b89-8633-6f896a76d060",
+      "name": "No Operation, do nothing"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "/chat-message",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        432,
+        832
+      ],
+      "id": "7da4ef67-5dde-456b-925a-526e732bc228",
+      "name": "Webhook",
+      "webhookId": "ff58fcd7-0d17-4e34-bc68-05cf1d9b1454"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify({ \"result\": $json.output || \"No response generated\" }) }}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        1088,
+        848
+      ],
+      "id": "7cf033dd-b3bf-476c-956c-457d3e5b3006",
+      "name": "Respond to Webhook"
+    }
+  ],
+  "pinData": {
+    "Webhook": [
+      {
+        "json": {
+          "headers": {
+            "host": "ahmedumeranees.app.n8n.cloud",
+            "user-agent": "curl/8.7.1",
+            "content-length": "22",
+            "accept": "*/*",
+            "accept-encoding": "gzip, br",
+            "cdn-loop": "cloudflare; loops=1; subreqs=1",
+            "cf-connecting-ip": "39.45.31.112",
+            "cf-ew-via": "15",
+            "cf-ipcountry": "PK",
+            "cf-ray": "99396eb4a036f90a-SIN",
+            "cf-visitor": "{\"scheme\":\"https\"}",
+            "cf-worker": "n8n.cloud",
+            "content-type": "application/json",
+            "x-forwarded-for": "39.45.31.112, 172.68.164.56",
+            "x-forwarded-host": "ahmedumeranees.app.n8n.cloud",
+            "x-forwarded-port": "443",
+            "x-forwarded-proto": "https",
+            "x-forwarded-server": "traefik-prod-users-gwc-34-f494454b5-rhxmd",
+            "x-is-trusted": "yes",
+            "x-real-ip": "39.45.31.112"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "chatInput": "Hello"
+          },
+          "webhookUrl": "https://ahmedumeranees.app.n8n.cloud/webhook/chat-message",
+          "executionMode": "production"
+        }
+      }
+    ]
+  },
+  "connections": {
+    "File Created": {
+      "main": [
+        [
+          {
+            "node": "Download file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "File Updated": {
+      "main": [
+        [
+          {
+            "node": "Download file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download file": {
+      "main": [
+        [
+          {
+            "node": "Switch- By Type",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch- By Type": {
+      "main": [
+        [
+          {
+            "node": "Extract from File",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Extract Google Doc Text",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Parse Excel File",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Extract from CSV",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract from File": {
+      "main": [
+        [
+          {
+            "node": "Normalize Content",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Google Doc Text": {
+      "main": [
+        [
+          {
+            "node": "Normalize Content",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Excel File": {
+      "main": [
+        [
+          {
+            "node": "Normalize Content",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract from CSV": {
+      "main": [
+        [
+          {
+            "node": "Normalize Content",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch - Content Type": {
+      "main": [
+        [
+          {
+            "node": "Chunk Text",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Convert Tabular to Text",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Convert Tabular to Text": {
+      "main": [
+        [
+          {
+            "node": "Chunk Text",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Chunk Text": {
+      "main": [
+        [
+          {
+            "node": "Doc Shape",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings OpenAI": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Qdrant Vector Store",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Default Data Loader": {
+      "ai_document": [
+        [
+          {
+            "node": "Qdrant Vector Store",
+            "type": "ai_document",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Doc Shape": {
+      "main": [
+        [
+          {
+            "node": "Qdrant Vector Store",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Qdrant – Get Many": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When chat message received": {
+      "main": [
+        []
+      ]
+    },
+    "Check Every Day": {
+      "main": [
+        [
+          {
+            "node": "Get Trashed Files via API",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Trashed Files via API": {
+      "main": [
+        [
+          {
+            "node": "Parse Trashed Files",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Trashed Files": {
+      "main": [
+        [
+          {
+            "node": "Has Files to Delete?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Has Files to Delete?": {
+      "main": [
+        [
+          {
+            "node": "Split in Batches (50)1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "No Operation, do nothing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Qdrant – Delete by file_id1": {
+      "main": [
+        [
+          {
+            "node": "Delete a file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split in Batches (50)1": {
+      "main": [
+        [
+          {
+            "node": "Qdrant – Delete by file_id1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Delete a file": {
+      "main": [
+        [
+          {
+            "node": "Split in Batches (50)1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Qdrant Vector Store1": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings OpenAI2": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Qdrant Vector Store1",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings OpenAI1": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Qdrant – Get Many",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalize Content": {
+      "main": [
+        [
+          {
+            "node": "Switch - Content Type",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "a0de1ee5-d94a-4696-aabd-d53fffdc0d31",
+  "meta": {
+    "instanceId": "9b905f454e4d53e77fccadd1073ccfd8b05cdebb72c498e74a972050e78808f8"
+  },
+  "id": "ltxNclZrwFFZ6xm5",
+  "tags": []
+}

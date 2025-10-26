@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Chat-with-Your-Drive</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+</head>
+<body>
+  <div class="app">
+    <header class="app__header">
+      <div class="brand">
+        <img src="favicon.svg" alt="logo" />
+        <h1>Chat-with-Your-Drive</h1>
+      </div>
+      <div class="status" id="status">Ready</div>
+    </header>
+
+    <main class="chat" id="chat"></main>
+
+    <form class="composer" id="composer">
+      <button class="icon-btn" id="clear" title="Clear chat" type="button">🧹</button>
+      <textarea id="input" rows="1" placeholder="Type a message..." autocomplete="off"></textarea>
+      <button class="send" id="send" type="submit">Send ➤</button>
+    </form>
+  </div>
+
+  <template id="msg-template">
+    <div class="msg">
+      <div class="avatar"></div>
+      <div class="bubble"></div>
+    </div>
+  </template>
+
+  <script src="config.example.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

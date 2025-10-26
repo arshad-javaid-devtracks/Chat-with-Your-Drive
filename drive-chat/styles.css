@@ -1,0 +1,24 @@
+*{box-sizing:border-box}html,body{height:100%}body{margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif;background:#0b1220;color:#e8eefb}
+.app{max-width:920px;margin:0 auto;padding:16px;display:flex;flex-direction:column;min-height:100vh;gap:12px}
+.app__header{display:flex;align-items:center;justify-content:space-between;background:#111a2e;border:1px solid #233252;border-radius:12px;padding:10px 14px}
+.brand{display:flex;gap:10px;align-items:center}
+.brand img{width:24px;height:24px}
+.brand h1{font-size:16px;margin:0;font-weight:600}
+.status{font-size:12px;color:#9fb3d9}
+.chat{flex:1;overflow:auto;background:#0e1629;border:1px solid #1c2a44;border-radius:12px;padding:16px;display:flex;flex-direction:column;gap:12px}
+.msg{display:flex;gap:10px;align-items:flex-start}
+.msg .avatar{width:28px;height:28px;border-radius:50%;background:#2a3b5e;display:grid;place-items:center;color:#cfe0ff;font-weight:700}
+.msg.user .avatar{background:#2b5e3b}
+.msg .bubble{max-width:75%;background:#14213b;border:1px solid #24365a;border-radius:12px;padding:10px 12px;white-space:pre-wrap;line-height:1.45}
+.msg.user .bubble{background:#173a2a;border-color:#255a44}
+.composer{display:flex;gap:8px;align-items:center;background:#111a2e;border:1px solid #233252;border-radius:12px;padding:10px}
+.icon-btn{background:transparent;border:1px solid #28426b;color:#cfe0ff;border-radius:8px;padding:8px;cursor:pointer}
+.icon-btn:hover{background:#1a2a47}
+#input{flex:1;resize:none;background:#0b1220;color:#e8eefb;border:1px solid #28426b;border-radius:8px;padding:10px;outline:none}
+.send{background:#2a62ff;border:none;color:white;border-radius:8px;padding:10px 14px;cursor:pointer;font-weight:600}
+.send:disabled{opacity:.6;cursor:not-allowed}
+.typing{display:inline-block;min-width:36px}
+.dot{height:6px;width:6px;background:#9fb3d9;border-radius:50%;display:inline-block;margin-right:4px;animation:blink 1.2s infinite ease-in-out}
+.dot:nth-child(2){animation-delay:.2s}.dot:nth-child(3){animation-delay:.4s}
+@keyframes blink{0%,80%,100%{opacity:.2}40%{opacity:1}}
+footer{color:#9fb3d9;font-size:12px;text-align:center;margin-top:8px}
